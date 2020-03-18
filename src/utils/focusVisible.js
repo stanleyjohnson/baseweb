@@ -94,20 +94,20 @@ function handleVisibilityChange() {
 }
 
 function prepare(doc) {
-  doc.addEventListener('keydown', handleKeyDown, true);
-  doc.addEventListener('mousedown', handlePointerDown, true);
-  doc.addEventListener('pointerdown', handlePointerDown, true);
-  doc.addEventListener('touchstart', handlePointerDown, true);
-  doc.addEventListener('visibilitychange', handleVisibilityChange, true);
+  doc.addEventListener('keydown', handleKeyDown);
+  doc.addEventListener('mousedown', handlePointerDown);
+  doc.addEventListener('pointerdown', handlePointerDown);
+  doc.addEventListener('touchstart', handlePointerDown);
+  doc.addEventListener('visibilitychange', handleVisibilityChange);
 }
 
 //$FlowFixMe
 export function teardown(doc) {
-  doc.removeEventListener('keydown', handleKeyDown, true);
-  doc.removeEventListener('mousedown', handlePointerDown, true);
-  doc.removeEventListener('pointerdown', handlePointerDown, true);
-  doc.removeEventListener('touchstart', handlePointerDown, true);
-  doc.removeEventListener('visibilitychange', handleVisibilityChange, true);
+  doc.removeEventListener('keydown', handleKeyDown);
+  doc.removeEventListener('mousedown', handlePointerDown);
+  doc.removeEventListener('pointerdown', handlePointerDown);
+  doc.removeEventListener('touchstart', handlePointerDown);
+  doc.removeEventListener('visibilitychange', handleVisibilityChange);
 }
 
 //$FlowFixMe
@@ -145,10 +145,10 @@ export function handleBlurVisible() {
 }
 
 //$FlowFixMe
-export function initFocusVisible(node) {
-  if (!initialized && node != null) {
+export function initFocusVisible(document) {
+  if (!initialized && document != null) {
     initialized = true;
-    prepare(node.ownerDocument);
+    prepare(document);
   }
 }
 

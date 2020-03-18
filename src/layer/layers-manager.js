@@ -13,7 +13,7 @@ import type {
   LayersManagerStateT,
   LayersContextT,
 } from './types.js';
-import {initFocusVisible} from '../utils/focusVisible.js';
+import {initFocusVisible, teardown} from '../utils/focusVisible.js';
 
 const StyledAppContainer = styled('div', {});
 const StyledLayersContainer = styled('div', {});
@@ -46,11 +46,6 @@ export default class LayersManager extends React.Component<
     current: React.ElementRef<any> | null,
   } = React.createRef();
 
-  containerRef: {
-    // eslint-disable-next-line flowtype/no-weak-types
-    current: React.ElementRef<any> | null,
-  } = React.createRef();
-
   constructor(props: LayersManagerPropsT) {
     super(props);
     this.state = {escapeKeyHandlers: [], docClickHandlers: []};
@@ -58,9 +53,8 @@ export default class LayersManager extends React.Component<
 
   componentDidMount() {
     this.forceUpdate();
-    initFocusVisible(this.containerRef.current);
-
     if (__BROWSER__) {
+      initFocusVisible(document);
       document.addEventListener('keyup', this.onKeyUp);
       // using mousedown event so that callback runs before events on children inside of the layer
       document.addEventListener('mousedown', this.onDocumentClick);
@@ -69,6 +63,7 @@ export default class LayersManager extends React.Component<
 
   componentWillUnmount() {
     if (__BROWSER__) {
+      teardown(document);
       document.removeEventListener('keyup', this.onKeyUp);
       document.removeEventListener('mousedown', this.onDocumentClick);
     }
@@ -158,7 +153,7 @@ export default class LayersManager extends React.Component<
                 removeDocClickHandler: this.onRemoveDocClickHandler,
               }}
             >
-              <AppContainer {...appContainerProps} ref={this.containerRef}>
+              <AppContainer {...appContainerProps}>
                 {this.props.children}
               </AppContainer>
               <LayersContainer {...layersContainerProps} ref={this.host} />
