@@ -8,29 +8,24 @@ LICENSE file in the root directory of this source tree.
 
 import * as React from 'react';
 
-import {Menu} from '../index.js';
-
-const ITEMS = [
-  {label: 'Item One'},
-  {label: 'Item Two'},
-  {disabled: true, label: 'Item Three'},
-  {label: 'Item Four'},
-  {label: 'Item Five'},
-  {label: 'Item Six'},
-  {label: 'Item Seven'},
-  {label: 'Item Eight'},
-  {label: 'Item Nine'},
-  {label: 'Item Ten'},
-  {label: 'Item Eleven'},
-  {label: 'Item Twelve'},
-];
+import {StatefulMenu} from '../index.js';
 
 export default function Scenario() {
   return (
-    <Menu
-      items={ITEMS}
-      rootRef={React.createRef()}
+    <StatefulMenu
+      items={[
+        {label: 'Apple', href: '//www.example.com/apple'},
+        {label: 'Orange', href: '//www.example.com/orange'},
+        {label: 'Strawberry', href: '//www.example.com/strawberry'},
+      ]}
       overrides={{
+        ListItemAnchor: {
+          props: p => ({
+            ...p,
+            href: '//www.example.com/banana',
+            'data-foo': 'moo',
+          }),
+        },
         List: {
           style: {
             width: '200px',

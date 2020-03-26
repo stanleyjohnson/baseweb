@@ -16,6 +16,48 @@ import MaybeChildMenu from './maybe-child-menu.js';
 import {StyledListItem, StyledListItemAnchor} from './styled-components.js';
 import type {OptionListPropsT} from './types.js';
 
+import {isValidElementType} from 'react-is';
+function Override(Base) {
+  const Result = React.forwardRef((allProps, ref) => {
+    const {override, ...props} = allProps;
+    if (!override) {
+      return <Base ref={ref} {...props} />;
+    }
+
+    if (isValidElementType(override)) {
+      const ComponentOverride = override;
+      return <ComponentOverride ref={ref} {...props} />;
+    }
+
+    if (typeof override === 'object') {
+      let Component = Base;
+      if (isValidElementType(override.component)) {
+        Component = override.component;
+      }
+
+      let overrideProps = {};
+      if (typeof override.props === 'object') {
+        overrideProps = override.props;
+      } else if (typeof override.props === 'function') {
+        overrideProps = override.props(props);
+      }
+
+      if (override.style) {
+        overrideProps.$style = override.style;
+      }
+
+      return <Component ref={ref} {...overrideProps} />;
+    }
+
+    return <Base ref={ref} {...props} />;
+  });
+
+  return Result;
+}
+
+const ListItem = Override(StyledListItem);
+const ListItemAnchor = Override(StyledListItemAnchor);
+
 function OptionList(props: OptionListPropsT, ref: React.ElementRef<*>) {
   const {
     getChildMenu,
@@ -30,19 +72,14 @@ function OptionList(props: OptionListPropsT, ref: React.ElementRef<*>) {
     ...restProps
   } = props;
 
-  const [ListItem, listItemProps] = getOverrides(
-    overrides.ListItem,
-    StyledListItem,
-  );
-  const [ListItemAnchor, listItemAnchorProps] = getOverrides(
-    overrides.ListItemAnchor,
-    StyledListItemAnchor,
-  );
-
   const getItem = item => {
     if (item.href) {
       return (
-        <ListItemAnchor $item={item} href={item.href} {...listItemAnchorProps}>
+        <ListItemAnchor
+          $item={item}
+          href={item.href}
+          override={overrides.ListItemAnchor}
+        >
           {getItemLabel(item)}
         </ListItemAnchor>
       );
@@ -73,7 +110,7 @@ function OptionList(props: OptionListPropsT, ref: React.ElementRef<*>) {
             $size={size}
             $isHighlighted={$isHighlighted}
             {...restProps}
-            {...listItemProps}
+            override={overrides.ListItem}
           >
             {getItem({isHighlighted: $isHighlighted, ...item})}
           </ListItem>
