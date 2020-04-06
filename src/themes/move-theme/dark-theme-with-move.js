@@ -5,18 +5,16 @@ This source code is licensed under the MIT license found in the
 LICENSE file in the root directory of this source tree.
 */
 // @flow
-
-import deepMerge from '../../utils/deep-merge.js';
-import {DarkTheme} from '../dark-theme/dark-theme.js';
 import {
-  typography as moveTypography,
   fontTokens as moveFontTokens,
+  typography as moveTypography,
 } from './typography.js';
+import DarkTheme from '../dark-theme/theme.js';
+import deepMerge from '../../utils/deep-merge.js';
 import getTypography from '../shared/typography.js';
-
 import type {ThemeT} from '../../styles/types.js';
 
-export const DarkThemeMove: ThemeT = deepMerge({}, DarkTheme, {
+const DarkThemeMove: ThemeT = deepMerge({}, DarkTheme, {
   name: 'dark-theme-with-move',
   // For the move theme we need to override typography values
   // in the default darkTheme with a font values that reference
@@ -27,3 +25,5 @@ export const DarkThemeMove: ThemeT = deepMerge({}, DarkTheme, {
   // value with the customized set of fonts that reference a secondary font
   typography: deepMerge(getTypography(moveFontTokens), moveTypography),
 });
+
+export default DarkThemeMove;

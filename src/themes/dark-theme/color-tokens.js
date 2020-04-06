@@ -8,8 +8,7 @@ LICENSE file in the root directory of this source tree.
 import {colors} from '../../tokens/index.js';
 import type {ColorTokensT} from '../types.js';
 
-// color constants
-export const darkColorTokens: ColorTokensT = {
+const colorTokens: ColorTokensT = {
   // Primary Palette
   primaryA: colors.gray200,
   primaryB: colors.gray900,
@@ -81,4 +80,4 @@ export const darkColorTokens: ColorTokensT = {
   rating400: colors.yellow400,
 };
 
-export default darkColorTokens;
+export default colorTokens;
